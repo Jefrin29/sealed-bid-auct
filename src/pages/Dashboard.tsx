@@ -303,7 +303,7 @@ function Dashboard() {
                       <div className="ml-4">
                         <h3 className="text-lg font-semibold">Active Auctions</h3>
                         <p className="text-2xl font-bold">
-                          {myAuctions.filter(a => a.status === 'active').length}
+                          {myAuctions.filter(a => a.status === 'active' && new Date(a.end_time) > new Date()).length}
                         </p>
                       </div>
                     </div>
@@ -369,10 +369,12 @@ function Dashboard() {
                             <p className="font-medium">{auction.product.title}</p>
                             <p className="text-sm text-gray-500">
                               Status: <span className={`font-medium ${
-                                auction.status === 'active' ? 'text-green-600' : 
-                                auction.status === 'ended' ? 'text-gray-600' : 'text-amber-600'
+                                (auction.status === 'active' && new Date(auction.end_time) > new Date()) ? 'text-green-600' : 
+                                (auction.status === 'ended' || new Date(auction.end_time) <= new Date()) ? 'text-gray-600' : 'text-amber-600'
                               }`}>
-                                {auction.status.charAt(0).toUpperCase() + auction.status.slice(1)}
+                                {(auction.status === 'active' && new Date(auction.end_time) > new Date()) ? 'Active' :
+                                 (auction.status === 'ended' || new Date(auction.end_time) <= new Date()) ? 'Ended' :
+                                 auction.status.charAt(0).toUpperCase() + auction.status.slice(1)}
                               </span>
                             </p>
                           </div>
@@ -562,11 +564,11 @@ function Dashboard() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {auction.status === 'active' ? (
+                            {(auction.status === 'active' && new Date(auction.end_time) > new Date()) ? (
                               <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                 Active
                               </span>
-                            ) : auction.status === 'ended' ? (
+                            ) : (auction.status === 'ended' || new Date(auction.end_time) <= new Date()) ? (
                               <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
                                 Ended
                               </span>
