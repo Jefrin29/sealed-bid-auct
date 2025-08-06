@@ -66,7 +66,7 @@ function AuctionDetail() {
         .select('id, amount')
         .eq('auction_id', id)
         .eq('bidder_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
       setHasUserBid(!!data);
@@ -175,7 +175,7 @@ function AuctionDetail() {
       .select('id, amount')
       .eq('auction_id', id)
       .eq('bidder_id', user.id)
-      .single();
+      .maybeSingle();
 
     if (existingBid) {
       setError('You have already placed a bid for this auction. One bid per item is allowed and cannot be modified.');
